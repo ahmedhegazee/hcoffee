@@ -7,7 +7,7 @@
         <tr>
             <th>الاسم</th>
             <th>رقم الجوال</th>
-            <th>طريقة الدفع</th>
+            <th>حالة الدفع</th>
             <th>المبلغ الاجمالي</th>
             <th>التاريخ</th>
             <th>عدد الاشخاص</th>
@@ -22,7 +22,7 @@
         <tr>
             <td>{{ $reservation->name }}</td>
             <td>{{ $reservation->phone }}</td>
-            <td>{{ $reservation->paymentMethod }}</td>
+            <td>{{ $reservation->payment_status }}</td>
             <td>{{ $reservation->total_amount }}</td>
             <td>{{ $reservation->date }}</td>
             <td>{{ $reservation->guests_count }}</td>

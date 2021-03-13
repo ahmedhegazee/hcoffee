@@ -29,54 +29,16 @@
                         class="nav-link {{ Request::url()==route('admin.home')?'active':'' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Dashboard
-                        </p>
-                    </a>
-                    {{-- <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="./index.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Dashboard v1</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="./index2.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Dashboard v2</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="./index3.html" class="nav-link active">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Dashboard v3</p>
-                            </a>
-                        </li>
-                    </ul> --}}
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.slider.index') }}"
-                        class="nav-link {{ request()->is("dashboard/slider/*")||request()->is("dashboard/slider")?'active':'' }}">
-                        <i class="nav-icon fas fa-images"></i>
-                        <p>
-                            Slider
+                            لوحة التحكم
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.category.index') }}"
-                        class="nav-link {{ request()->is("dashboard/product/category/*")||request()->is("dashboard/product/category")?'active':'' }}">
-                        <i class="nav-icon fas fa-star"></i>
+                    <a href="{{ route('admin.reservation.index') }}"
+                        class="nav-link {{ Request::url()==route('admin.reservation.index')?'active':'' }}">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Categories
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.product.index') }}"
-                        class="nav-link {{ request()->is("dashboard/product/product/*")||request()->is("dashboard/product/product")?'active':'' }}">
-                        <i class="nav-icon fas fa-box"></i>
-                        <p>
-                            Products
+                            الحجوزات
                         </p>
                     </a>
                 </li>

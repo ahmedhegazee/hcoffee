@@ -11,7 +11,8 @@ Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
 import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/js/all.js";
-
+import Vuelidate from "vuelidate";
+Vue.use(Vuelidate);
 const router = new VueRouter({
     mode: "history",
     routes: routes,

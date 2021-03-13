@@ -17,7 +17,6 @@ class FrontController extends Controller
             "phone" => "required|string|min:3|max:191",
             "notes" => "nullable|string|min:3|max:1000",
             "total_amount" => "required|numeric|min:0",
-            "paymentMethod" => "required|numeric|in:0,1",
             "date" => "required|date",
             "guests_count" => "required|numeric|min:1|max:500",
             "interval" => "required|numeric|in:0,1",
@@ -38,5 +37,11 @@ class FrontController extends Controller
         ];
         $url = $this->AddInvoice($reservation, $products);
         return response()->json(["url" => $url]);
+    }
+    public function showPaymentStatus(Reservation $reservation)
+    {
+        $result = $this->GetInvoice($reservation->payment_transaction_id);
+        dd($result);
+        return view("welcome");
     }
 }

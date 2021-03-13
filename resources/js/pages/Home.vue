@@ -110,30 +110,31 @@
         <label for="exampleInputPassword1" class="w-full d-block title"
           >الاوقات المتاحة</label
         >
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label class="btn btn-secondary active">
-            <input
-              type="radio"
-              id="option1"
-              value="0"
-              checked
-              v-model="form.interval"
-            />
-            من ٦ الى ١٠ مساء
-          </label>
-          <label class="btn btn-secondary">
-            <input
-              type="radio"
-              id="option2"
-              value="1"
-              v-model="form.interval"
-            />
-            من ١٠ الى ١٢ مساء
-          </label>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            v-model="form.interval"
+            value="0"
+          />
+          <label class="form-check-label" for="inlineRadio1"
+            >من ٨ الى ١٠ مساء</label
+          >
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            v-model="form.interval"
+            value="1"
+          />
+          <label class="form-check-label" for="inlineRadio2"
+            >من ١٠ الى ١٢ مساء</label
+          >
         </div>
       </div>
       <div class="row" style="flex-direction: row-reverse">
-        <div class="col-8 title">السعر</div>
+        <div class="col-8 title">(١٠٠* {{ form.guests_count }}) السعر</div>
         <div class="col-4 price">ريال {{ price }}</div>
         <div class="col-8 title">ضريبة القيمة المضافة</div>
         <div class="col-4 price">ريال {{ tax }}</div>
@@ -141,43 +142,41 @@
         <div class="col-4 price">ريال {{ totalAmount }}</div>
       </div>
       <div class="form-group mt-4">
-        <label for="exampleInputPassword1" class="title">طريقة الدفع</label>
-        <div class="form-check" style="direction: rtl">
-          <input
-            class="form-check-input"
-            type="radio"
-            id="exampleRadios1"
-            value="0"
-            checked
-            v-model="form.paymentMethod"
-          />
-          <label class="form-check-label title" for="exampleRadios1">
-            كاش
-          </label>
-        </div>
-        <div class="form-check" style="direction: rtl">
-          <input
-            class="form-check-input"
-            type="radio"
-            id="exampleRadios2"
-            value="1"
-            v-model="form.paymentMethod"
-          />
-          <label class="form-check-label title" for="exampleRadios2">
-            اونلاين
-          </label>
-        </div>
+        <label for="exampleInputPassword1" class="title d-block"
+          >طرق الدفع</label
+        >
+        <img src="images/mada.png" alt="" class="d-inline" width="100px" />
+        <img
+          src="images/mastercard.svg"
+          alt=""
+          class="d-inline"
+          width="100px"
+        />
+        <img src="images/visa.png" alt="" class="d-inline" width="100px" />
       </div>
       <div class="form-group">
         <label for="exampleFormControlInput1" class="title">الاسم</label>
         <input
           type="text"
           class="form-control"
+          :class="{ 'form-group--error': $v.form.name.$error }"
           id="exampleFormControlInput1"
           placeholder="اكتب اسمك"
           required
           v-model="form.name"
         />
+        <div
+          class="invalid-feedback"
+          v-if="!$v.form.name.required && $v.form.name.$error"
+        >
+          الرجاء كتابة الاسم
+        </div>
+        <div
+          class="invalid-feedback"
+          v-if="!$v.form.name.minLength && $v.form.name.$error"
+        >
+          يجب ان يكون الاسم على الاقل ٣ حروف
+        </div>
       </div>
       <div class="form-group">
         <label for="exampleFormControlInput1" class="title">رقم الجوال</label>
@@ -188,7 +187,14 @@
           placeholder="اكتب رقم جوالك"
           required
           v-model="form.phone"
+          :class="{ 'form-group--error': $v.form.phone.$error }"
         />
+        <div
+          class="invalid-feedback"
+          v-if="!$v.form.phone.required && $v.form.phone.$error"
+        >
+          الرجاء كتابة رقم الجوال
+        </div>
       </div>
       <div class="form-group">
         <label for="exampleFormControlTextarea1" class="title">ملاحظات</label>
@@ -218,38 +224,61 @@
           value=""
           id="defaultCheck1"
           required
+          v-model="form.terms"
+          :class="{ 'form-group--error': showTermsError }"
         />
         <label class="form-check-label" for="defaultCheck1">
           لقد قرات وقبلت الشروط والاحكام
         </label>
+        <div class="invalid-feedback" v-if="showTermsError">
+          الرجاء الموافقة على الشروط والاحكام
+        </div>
       </div>
-      <button
-        type="button"
-        @click="sendReservation"
-        class="btn btn-primary mt-2"
-      >
-        احجز
-      </button>
+      <div class="w-full">
+        <button
+          type="button"
+          @click="sendReservation"
+          class="btn btn-primary mt-2"
+          style="width: 100%"
+        >
+          اتمام الحجز
+        </button>
+      </div>
     </form>
   </div>
 </template>
 
 <script>
+import { required, minLength } from "vuelidate/lib/validators";
 export default {
   components: {},
   data() {
+    let currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+    let dateString =
+      currentDate.getFullYear().toString() +
+      "-" +
+      (currentDate.getMonth() + 1).toString().padStart(2, 0) +
+      "-" +
+      currentDate.getDate().toString().padStart(2, 0);
     return {
       form: {
         name: "",
         phone: "",
         notes: "",
-        paymentMethod: "0",
         price: 0,
         interval: 0,
-        date: "",
+        date: dateString,
         guests_count: 1,
+        terms: false,
       },
+      showTermsError: false,
     };
+  },
+  validations: {
+    form: {
+      name: { required, minLength: minLength(3) },
+      phone: { required },
+    },
   },
   methods: {
     increaseGuestsCount() {
@@ -259,6 +288,15 @@ export default {
       if (this.form.guests_count > 1) this.form.guests_count--;
     },
     sendReservation() {
+      this.$v.form.$touch();
+
+      if (this.$v.form.$invalid) {
+        return;
+      }
+      if (!this.form.terms) {
+        this.showTermsError = true;
+        return;
+      }
       this.form.total_amount = this.totalAmount;
       axios.post("/reservation", this.form).then((response) => {
         // window.location.href = response.data.url;
@@ -267,7 +305,7 @@ export default {
   },
   computed: {
     price() {
-      return this.form.guests_count * 500;
+      return this.form.guests_count * 100;
     },
     tax() {
       return this.price * 0.15;
@@ -321,5 +359,8 @@ export default {
   border: 1px solid #bbb;
   border-radius: 10px;
   padding: 10px 15px;
+}
+.invalid-feedback {
+  display: block;
 }
 </style>

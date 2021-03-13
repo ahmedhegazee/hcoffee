@@ -19,8 +19,8 @@ class CreateReservationsTable extends Migration
             $table->string("phone");
             $table->text("notes")->nullable();
             $table->unsignedBigInteger("total_amount");
-            $table->string("paymentMethod");
-            $table->string("payment_transaction_no")->nullable();
+            $table->string("payment_transaction_no");
+            $table->string("payment_status")->nullable();
             $table->date("date");
             $table->unsignedInteger("guests_count");
             $table->tinyInteger("interval"); //0 =>for first one, 1=>for second one

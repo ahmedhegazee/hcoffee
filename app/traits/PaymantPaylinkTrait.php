@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Reservation;
+use Illuminate\Support\Facades\Http;
 
 trait PaymantPaylinkTrait
 {
@@ -18,21 +19,9 @@ trait PaymantPaylinkTrait
             "persistToken" => false,
             "secretKey" => "c33dd197-dfbb-36ab-81ac-265c713e4321",
         ];
-        $apifields_string = json_encode($apifields);
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $apifields_string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "Content-Type: application/json",
-        ));
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        //execute post
-        $apiresult = curl_exec($ch);
-        $urldecode = (json_decode($apiresult, true));
-        dd($urldecode);
+        $urldecode = Http::withHeaders([
+            "Content-Type" => "application/json"
+        ])->asJson()->post($url, $apifields)->json();
         return $urldecode['id_token'];
     }
 
@@ -41,7 +30,7 @@ trait PaymantPaylinkTrait
         $url = $this->url . '/addInvoice';
         $apifields = [
             "amount" => $reservation->total_amount,
-            "callBackUrl" => route('welcome', ['payment' => true]),
+            "callBackUrl" => route('welcome', ['reservation' => $reservation->id]),
             "clientEmail" => null,
             "clientMobile" => $reservation->phone,
             "clientName" => $reservation->name,
@@ -49,21 +38,10 @@ trait PaymantPaylinkTrait
             "orderNumber" => $reservation->id,
             "products" => $products,
         ];
-        $apifields_string = json_encode($apifields);
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $apifields_string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "Authorization: Bearer " . $this->GetTokenPayment(),
-            "Content-Type: application/json",
-        ));
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        //execute post
-        $apiresult = curl_exec($ch);
-        $urldecode = (json_decode($apiresult, true));
+        $urldecode = Http::withHeaders([
+            "Content-Type" => "application/json",
+            "Authorization" => "Bearer " . $this->GetTokenPayment()
+        ])->asJson()->post($url, $apifields)->json();
         $reservation->update([
             'payment_transaction_no' => $urldecode['transactionNo'],
         ]);
@@ -72,20 +50,10 @@ trait PaymantPaylinkTrait
     private function GetInvoice($transactionNo)
     {
         $url = $this->url . '/getInvoice/' . $transactionNo;
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "Authorization: Bearer " . $this->GetTokenPayment(),
-            "Content-Type: application/json",
-        ));
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        //execute post
-        $apiresult = curl_exec($ch);
-
-        $urldecode = (json_decode($apiresult, true));
+        $urldecode = Http::withHeaders([
+            "Content-Type" => "application/json",
+            "Authorization" => "Bearer " . $this->GetTokenPayment()
+        ])->asJson()->get($url)->json();
 
         return $urldecode['orderStatus'];
     }

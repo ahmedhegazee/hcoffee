@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Reservation extends Model
 {
     use HasFactory;
-    protected $fillable = ["name", "phone", "notes", "total_amount", "paymentMethod", "payment_transaction_id", "date", "guests_count", "interval", "is_accepted"];
+    protected $fillable = ["name", "phone", "notes", "total_amount",  "payment_transaction_id", "date", "guests_count", "interval", "is_accepted"];
 
     public function getIntervalAttribute()
     {
