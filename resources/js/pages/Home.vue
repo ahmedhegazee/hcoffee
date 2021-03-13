@@ -299,7 +299,7 @@ export default {
       }
       this.form.total_amount = this.totalAmount;
       axios.post("/reservation", this.form).then((response) => {
-        // window.location.href = response.data.url;
+        window.location.href = response.data.url;
       });
     },
   },
