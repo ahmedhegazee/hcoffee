@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\FrontController;
+use App\Http\Controllers\ReservationController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,17 +16,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get("payment-success", function () {
+    return view("welcome");
+})->name("welcome");
+
 Auth::routes(['register' => false, 'reset' => false]);
 
 Route::prefix('dashboard')->middleware('auth')->name('admin.')->group(function () {
     Route::get('/', [HomeController::class, "index"])->name('home');
-    Route::resource("slider", HomeImagePageController::class)->except(['show']);
-    Route::prefix("product")->group(function () {
-        Route::resource("category", ProductCategroyController::class)->except(['show']);
-        Route::resource("{product}/attribute", ProductAttributeController::class)->except(['show']);
-        Route::resource("product", ProductController::class)->except(["show"]);
-        Route::resource("{product}/image", ProductImageController::class)->except(["show"]);
-    });
+    Route::get("/reservations", [ReservationController::class, "index"])->name('reservation.index');
+    Route::put("/reservations", [ReservationController::class, "update"])->name('reservation.update');
 });
 Route::get('/404', fn () => view('errors.404'));
 Route::get('/401', fn () => view('errors.401'));
@@ -36,3 +38,5 @@ Route::get('/503', fn () => view('errors.503'));
 Route::get('{any}', function () {
     return view('main');
 })->where('any', '.*');
+
+Route::post("reservation", [FrontController::class, "makeOrder"]);
