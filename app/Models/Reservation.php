@@ -26,4 +26,16 @@ class Reservation extends Model
 
         ][$this->attributes['is_accepted']];
     }
+    public function scopeStatus($query, $status)
+    {
+        return $query->when($status, fn ($q, $status) => $q->where("is_accepted", $status));
+    }
+    public function scopeDateFilter($query, $start, $end)
+    {
+        return $query->when($start, fn ($q, $start, $end) => $q->whereBetween("date", [$start, $end]));
+    }
+    public function scopeSearch($query, $search)
+    {
+        return $query->when($search, fn ($q, $search) => $q->where("name", 'like', "% $search%")->orWhere("phone", 'like', "% $search%"));
+    }
 }

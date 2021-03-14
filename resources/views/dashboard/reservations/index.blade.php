@@ -1,7 +1,14 @@
 @extends('layouts.dashboard')
 
 @section('content')
-
+<div class="row">
+    <form action="{{ route('admin.reservation.index') }}" method="GET">
+        <input type="text" name="search" placeholder="البحث">
+        <input type="date" name="start_date" id="" placeholder="تاريخ البداية">
+        <input type="date" name="start_date" id="" placeholder="تاريخ النهاية">
+        <button class="btn btn-primary">فلتر</button>
+    </form>
+</div>
 <table class="table table-hover text-nowrap">
     <thead>
         <tr>
@@ -52,7 +59,7 @@
     </tbody>
 </table>
 <div class="row justify-content-center">
-    {{ $reservations->links() }}
+    {{ $reservations->appends(['search' => request('search'),'start_date'=>request('start_date'),'end_date'=>request('end_date')]) }}
 </div>
 @endsection
 @push('scripts')

@@ -1,5 +1,19 @@
 <template>
   <div class="home_slider">
+    <div class="sk-circle">
+      <div class="sk-circle1 sk-child"></div>
+      <div class="sk-circle2 sk-child"></div>
+      <div class="sk-circle3 sk-child"></div>
+      <div class="sk-circle4 sk-child"></div>
+      <div class="sk-circle5 sk-child"></div>
+      <div class="sk-circle6 sk-child"></div>
+      <div class="sk-circle7 sk-child"></div>
+      <div class="sk-circle8 sk-child"></div>
+      <div class="sk-circle9 sk-child"></div>
+      <div class="sk-circle10 sk-child"></div>
+      <div class="sk-circle11 sk-child"></div>
+      <div class="sk-circle12 sk-child"></div>
+    </div>
     <div
       id="carouselExampleIndicators"
       class="carousel slide"
@@ -110,27 +124,15 @@
         <label for="exampleInputPassword1" class="w-full d-block title"
           >الاوقات المتاحة</label
         >
-        <div class="form-check form-check-inline">
-          <input
-            class="form-check-input"
-            type="radio"
-            v-model="form.interval"
-            value="0"
-          />
-          <label class="form-check-label" for="inlineRadio1"
-            >من ٨ الى ١٠ مساء</label
-          >
-        </div>
-        <div class="form-check form-check-inline">
-          <input
-            class="form-check-input"
-            type="radio"
-            v-model="form.interval"
-            value="1"
-          />
-          <label class="form-check-label" for="inlineRadio2"
-            >من ١٠ الى ١٢ مساء</label
-          >
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-secondary interval_choice">
+            <input type="radio" v-model="form.interval" value="0" checked />
+            الفترة الاولى من ٨ الى ١٠ مساء
+          </label>
+          <label class="btn btn-secondary interval_choice">
+            <input type="radio" v-model="form.interval" value="1" /> الفترة
+            الثانية من ١٠ الى ١٢ مساء
+          </label>
         </div>
       </div>
       <div class="row" style="flex-direction: row-reverse">
@@ -153,6 +155,8 @@
           width="100px"
         />
         <img src="images/visa.png" alt="" class="d-inline" width="100px" />
+        <img src="images/stcpay.jpg" alt="" class="d-inline" width="100px" />
+        <img src="images/applepay.png" alt="" class="d-inline" width="100px" />
       </div>
       <div class="form-group">
         <label for="exampleFormControlInput1" class="title">الاسم</label>
@@ -329,6 +333,17 @@ export default {
 }
 .coffee-details {
   background: #fff5e9;
+}
+.interval_choice {
+  background: transparent !important;
+
+  border: thin solid #581642 !important;
+  border-radius: 5px;
+  color: #000;
+}
+.btn-secondary:not(:disabled):not(.disabled).active {
+  background-color: #581642 !important;
+  color: #fff;
 }
 .container {
   margin: auto !important;
