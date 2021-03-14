@@ -8,14 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Reservation extends Model
 {
     use HasFactory;
-    protected $fillable = ["name", "phone", "notes", "total_amount",  "payment_transaction_id", "date", "guests_count", "interval", "is_accepted"];
-
-    public function getIntervalAttribute()
+    protected $fillable = ["name", "phone", "notes", "total_amount",  "payment_transaction_id", "guests_count", "is_accepted", "payment_status"];
+    public function interval()
     {
-        return [
-            0 => "من ٦ الى ١٠ مساء",
-            1 => "من ١٠ الى ١٢ مساء"
-        ][$this->attributes['interval']];
+        return $this->belongsTo(Interval::class);
     }
     public function getIsAcceptedAttribute()
     {
@@ -36,6 +32,6 @@ class Reservation extends Model
     }
     public function scopeSearch($query, $search)
     {
-        return $query->when($search, fn ($q, $search) => $q->where("name", 'like', "% $search%")->orWhere("phone", 'like', "% $search%"));
+        return $query->when($search, fn ($q, $search) => $q->where("name", 'like', "%$search%")->orWhere("phone", 'like', "%$search%"));
     }
 }

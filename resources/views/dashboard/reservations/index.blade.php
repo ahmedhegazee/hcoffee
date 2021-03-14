@@ -4,8 +4,12 @@
 <div class="row">
     <form action="{{ route('admin.reservation.index') }}" method="GET">
         <input type="text" name="search" placeholder="البحث">
-        <input type="date" name="start_date" id="" placeholder="تاريخ البداية">
-        <input type="date" name="start_date" id="" placeholder="تاريخ النهاية">
+        <input type="date" name="start_date" id="" placeholder="">
+        <label for="">تاريخ البداية</label>
+
+        <input type="date" name="start_date" id="" placeholder="">
+        <label for="">تاريخ النهاية</label>
+
         <button class="btn btn-primary">فلتر</button>
     </form>
 </div>
@@ -31,20 +35,20 @@
             <td>{{ $reservation->phone }}</td>
             <td>{{ $reservation->payment_status }}</td>
             <td>{{ $reservation->total_amount }}</td>
-            <td>{{ $reservation->date }}</td>
+            <td>{{ $reservation->interval->date }}</td>
             <td>{{ $reservation->guests_count }}</td>
-            <td>{{ $reservation->interval }}</td>
+            <td>{{ $reservation->interval->type }}</td>
             <td>{{ $reservation->notes }}</td>
             <td>{{ $reservation->is_accepted }}</td>
             <td>
                 <select onchange="changeReservationStatus({{ $reservation->id }})"
-                    id="reservation-status-{{ $reservation->id }}">
+                    id="reservation-status-{{ $reservation->id }}" class="d-block">
                     <option disabled> اختر حالة الحجز</option>
                     <option value="0">في الانتظار</option>
                     <option value="1">تمت الموافقة</option>
                     <option value="2">تم الالغاء</option>
                 </select>
-                <a href="#" class="btn btn-success"
+                <a href="#" class="btn btn-success d-block"
                     onclick="event.preventDefault();updateRecord({{ $reservation->id }})"><i class="fas fa-edit"></i>
                     تغيير حالة الحجز</a>
                 <form id="update-form-{{ $reservation->id }}"

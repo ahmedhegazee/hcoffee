@@ -13,13 +13,20 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/js/all.js";
 import Vuelidate from "vuelidate";
 Vue.use(Vuelidate);
+import VueSweetalert2 from "vue-sweetalert2";
+
+// If you don't need the styles, do not connect
+import "sweetalert2/dist/sweetalert2.min.css";
+
+Vue.use(VueSweetalert2);
+
 const router = new VueRouter({
     mode: "history",
-    routes: routes,
+    routes: routes
 });
 
 const app = new Vue({
     el: "#app",
     router,
-    render: (h) => h(App),
+    render: h => h(App)
 });

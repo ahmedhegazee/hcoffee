@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Interval;
 use App\Models\Reservation;
 use App\Traits\PaymantPaylinkTrait as TraitsPaymantPaylinkTrait;
 use Illuminate\Http\Request;
@@ -25,23 +25,36 @@ class FrontController extends Controller
         if ($validator->fails()) {
             return \response()->json(["errors" => $validator->errors()->toArray()], 500);
         }
-        $reservation = Reservation::create($request->all());
-        $products = [
-            [
-                "description" => "Making reservation for seats in hollywood cafe",
-                "imageSrc" => \asset("images/logo.jpg"),
-                "price" => $reservation->total_amount,
-                "qty" => 1,
-                "title" => "Seats Reservation"
-            ]
-        ];
-        $url = $this->AddInvoice($reservation, $products);
-        return response()->json(["url" => $url]);
+        $interval = Interval::where("date", $request->date)->where("type", $request->interval)->first();
+        if (is_null($interval)) {
+            return \response()->json(["message" => "لا يمكن الحجز في هذا التاريخ"]);
+        }
+        if (($interval->guests_count + $request->guests_count) <= $interval->max_guests_count) {
+            $reservation = $interval->reservations()->create($request->all());
+            $products = [
+                [
+                    "description" => "Making reservation for seats in hollywood cafe",
+                    "imageSrc" => \asset("images/logo.jpg"),
+                    "price" => $reservation->total_amount,
+                    "qty" => 1,
+                    "title" => "Seats Reservation"
+                ]
+            ];
+            $url = $this->AddInvoice($reservation, $products);
+            if ($interval->guests_count == $interval->max_guests_count) {
+                $interval->is_completed = 1;
+                $interval->save();
+            }
+            return response()->json(["url" => $url]);
+        } else {
+            return \response()->json(["message" => "نعتذر لا يمكن الحجز في هذا اليوم العدد مكتمل"]);
+        }
     }
-    public function showPaymentStatus(Reservation $reservation)
+    public function showPaymentStatus(Request $request)
     {
-        $result = $this->GetInvoice($reservation->payment_transaction_id);
-        dd($result);
+        dd($request->all());
+        // $result = $this->GetInvoice($reservation->payment_transaction_id);
+        // dd($result);
         return view("welcome");
     }
 }

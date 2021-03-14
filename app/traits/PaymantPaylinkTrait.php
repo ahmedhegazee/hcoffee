@@ -30,7 +30,7 @@ trait PaymantPaylinkTrait
         $url = $this->url . '/addInvoice';
         $apifields = [
             "amount" => $reservation->total_amount,
-            "callBackUrl" => route('welcome', ['reservation' => $reservation->id]),
+            "callBackUrl" => route('welcome'),
             "clientEmail" => null,
             "clientMobile" => $reservation->phone,
             "clientName" => $reservation->name,
@@ -42,9 +42,14 @@ trait PaymantPaylinkTrait
             "Content-Type" => "application/json",
             "Authorization" => "Bearer " . $this->GetTokenPayment()
         ])->asJson()->post($url, $apifields)->json();
-        $reservation->update([
-            'payment_transaction_no' => $urldecode['transactionNo'],
-        ]);
+
+        $reservation->payment_transaction_no = $urldecode['transactionNo'];
+        $reservation->payment_status = $urldecode['orderStatus'];
+        $reservation->save();
+
+        // $reservation->update([
+        //     'payment_transaction_no' => $urldecode['transactionNo'],
+        // ]);
         return $urldecode['url'];
     }
     private function GetInvoice($transactionNo)

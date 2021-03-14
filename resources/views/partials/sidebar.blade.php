@@ -42,6 +42,24 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.interval.index') }}"
+                        class="nav-link {{ Request::url()==route('admin.interval.index')?'active':'' }}">
+                        <i class="nav-icon fas fa-calendar-week"></i>
+                        <p>
+                            فترات الحجز
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.setting.index') }}"
+                        class="nav-link {{ Request::url()==route('admin.setting.index')?'active':'' }}">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>
+                            الاعدادات
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

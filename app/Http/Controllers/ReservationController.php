@@ -14,8 +14,13 @@ class ReservationController extends Controller
      */
     public function index(Request $request)
     {
+
         $title = "الحجوزات";
-        $reservations = Reservation::status($request->status)->dateFilter($request->start_date, $request->end_date)->search($request->search)->paginate(20);
+        $reservations = Reservation::status($request->status)
+            ->dateFilter($request->start_date, $request->end_date)
+            ->search($request->search)
+            ->paginate(20);
+
         return view('dashboard.reservations.index', \compact('reservations', 'title'));
     }
 

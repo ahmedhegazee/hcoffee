@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IntervalController;
 use App\Http\Controllers\ReservationController;
-use App\Models\Reservation;
+use App\Http\Controllers\SettingController;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +28,9 @@ Route::prefix('dashboard')->middleware('auth')->name('admin.')->group(function (
     Route::get('/', [HomeController::class, "index"])->name('home');
     Route::get("/reservations", [ReservationController::class, "index"])->name('reservation.index');
     Route::put("/reservations", [ReservationController::class, "update"])->name('reservation.update');
+    Route::get("/setting", [SettingController::class, "index"])->name('setting.index');
+    Route::put("/setting/{setting}", [SettingController::class, "update"])->name('setting.update');
+    Route::resource("interval", IntervalController::class)->only(['index', 'update']);
 });
 Route::get('/404', fn () => view('errors.404'));
 Route::get('/401', fn () => view('errors.401'));
@@ -34,7 +39,7 @@ Route::get('/419', fn () => view('errors.419'));
 Route::get('/429', fn () => view('errors.429'));
 Route::get('/500', fn () => view('errors.500'));
 Route::get('/503', fn () => view('errors.503'));
-Route::get("payment-success/{reservation}", [FrontController::class, "showPaymentStatus"])->name("welcome");
+Route::get("payment-success", [FrontController::class, "showPaymentStatus"])->name("welcome");
 Route::post("reservation", [FrontController::class, "makeOrder"]);
 Route::get('{any}', function () {
     return view('main');

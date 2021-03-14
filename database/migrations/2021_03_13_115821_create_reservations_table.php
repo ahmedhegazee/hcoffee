@@ -19,11 +19,12 @@ class CreateReservationsTable extends Migration
             $table->string("phone");
             $table->text("notes")->nullable();
             $table->unsignedBigInteger("total_amount");
-            $table->string("payment_transaction_no");
+            $table->string("payment_transaction_no")->nullable();
             $table->string("payment_status")->nullable();
-            $table->date("date");
+            $table->foreignId("interval_id")->references("id")->on("intervals")
+                ->cascadeOnUpdate()->cascadeOnDelete();
             $table->unsignedInteger("guests_count");
-            $table->tinyInteger("interval"); //0 =>for first one, 1=>for second one
+            //0 =>for first one, 1=>for second one
             $table->tinyInteger("is_accepted")->default(0); //0 =>pending , 1=>accepted ,2=>declined
             $table->timestamps();
         });
