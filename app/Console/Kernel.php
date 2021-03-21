@@ -25,6 +25,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->exec("php -d register_argc_argv=1 /www/wwwroot/hcafee.ga/artisan add:intervals >> /dev/null 2>&1")
+            ->yearlyOn(3, 14)->runInBackground();
+        $schedule->exec("php -d register_argc_argv=1 /www/wwwroot/hcafee.ga/artisan test:test >> /dev/null 2>&1")->everyMinute()
+            ->runInBackground();
     }
 
     /**
@@ -34,7 +38,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

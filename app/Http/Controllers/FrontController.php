@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Interval;
 use App\Models\Reservation;
 use App\Traits\PaymantPaylinkTrait as TraitsPaymantPaylinkTrait;
+use App\Traits\TwilioWhatsappTrait;
 use Illuminate\Http\Request;
 
 class FrontController extends Controller
 {
-    use TraitsPaymantPaylinkTrait;
+    use TraitsPaymantPaylinkTrait, TwilioWhatsappTrait;
     public function makeOrder(Request $request)
     {
         $rules = [
@@ -52,6 +53,7 @@ class FrontController extends Controller
     }
     public function showPaymentStatus(Request $request)
     {
+        $this->sendMessage("+201019303786", 'تم حجز الموعد بنجاح');
         dd($request->all());
         // $result = $this->GetInvoice($reservation->payment_transaction_id);
         // dd($result);

@@ -20,12 +20,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-
 Auth::routes(['register' => false, 'reset' => false]);
-
+Route::get('/whats', [HomeController::class, "sendWhatsMessage"]);
 Route::prefix('dashboard')->middleware('auth')->name('admin.')->group(function () {
     Route::get('/', [HomeController::class, "index"])->name('home');
+
     Route::get("/reservations", [ReservationController::class, "index"])->name('reservation.index');
     Route::put("/reservations", [ReservationController::class, "update"])->name('reservation.update');
     Route::get("/setting", [SettingController::class, "index"])->name('setting.index');

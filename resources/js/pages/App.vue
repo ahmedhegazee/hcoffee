@@ -1,6 +1,7 @@
 <template >
   <!--  -->
   <div class="wrapper">
+    <Loader v-if="isLoading"></Loader>
     <!-- Page Content  -->
     <div id="content">
       <router-view></router-view>
@@ -8,9 +9,20 @@
   </div>
 </template>
 <script>
+import Loader from "../components/loader";
 export default {
-  methods: {},
-  computed: {},
+  components: { Loader },
+  mounted() {
+    let instance = this;
+    setTimeout(() => {
+      instance.isLoading = false;
+    }, 4000);
+  },
+  data() {
+    return {
+      isLoading: true,
+    };
+  },
 };
 </script>
 <style >
