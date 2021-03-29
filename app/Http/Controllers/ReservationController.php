@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {
@@ -16,12 +17,14 @@ class ReservationController extends Controller
     {
 
         $title = "الحجوزات";
-        $reservations = Reservation::status($request->status)
-            ->dateFilter($request->start_date, $request->end_date)
-            ->search($request->search)
-            ->paginate(20);
+        $query = Reservation::whereHas("interval", fn ($q) => $q->where(fn ($query) => $query->dateFilter($request->date)->type($request->interval)))
+            ->with("interval")
+            ->search($request->search);
+        $reservationsCount = $query->count();
 
-        return view('dashboard.reservations.index', \compact('reservations', 'title'));
+        $reservations = $query->paginate(20);
+        $totalGuestsSum = $query->select(DB::raw('sum(guests_count) as guests_sum'))->first()->guests_sum;
+        return view('dashboard.reservations.index', \compact('reservations', 'title', 'reservationsCount', 'totalGuestsSum'));
     }
 
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HomePageSettingController;
 use App\Http\Controllers\IntervalController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SettingController;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get("/test", [FrontController::class, "test"]);
 Auth::routes(['register' => false, 'reset' => false]);
 Route::get('/whats', [HomeController::class, "sendWhatsMessage"]);
 Route::prefix('dashboard')->middleware('auth')->name('admin.')->group(function () {
@@ -29,17 +31,12 @@ Route::prefix('dashboard')->middleware('auth')->name('admin.')->group(function (
     Route::put("/reservations", [ReservationController::class, "update"])->name('reservation.update');
     Route::get("/setting", [SettingController::class, "index"])->name('setting.index');
     Route::put("/setting/{setting}", [SettingController::class, "update"])->name('setting.update');
+    Route::get("/home_page_setting", [HomePageSettingController::class, "index"])->name('home_page_setting.index');
+    Route::put("/home_page_setting", [HomePageSettingController::class, "update"])->name('home_page_setting.update');
     Route::resource("interval", IntervalController::class)->only(['index', 'update']);
 });
-Route::get('/404', fn () => view('errors.404'));
-Route::get('/401', fn () => view('errors.401'));
-Route::get('/403', fn () => view('errors.403'));
-Route::get('/419', fn () => view('errors.419'));
-Route::get('/429', fn () => view('errors.429'));
-Route::get('/500', fn () => view('errors.500'));
-Route::get('/503', fn () => view('errors.503'));
+Route::get("/price", [FrontController::class, 'getPrice']);
 Route::get("payment-success", [FrontController::class, "showPaymentStatus"])->name("welcome");
 Route::post("reservation", [FrontController::class, "makeOrder"]);
-Route::get('{any}', function () {
-    return view('main');
-})->where('any', '.*');
+
+Route::view("/", 'main');

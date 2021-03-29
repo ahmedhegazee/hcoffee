@@ -136,7 +136,9 @@
         </div>
       </div>
       <div class="row" style="flex-direction: row-reverse">
-        <div class="col-8 title">(١٠٠* {{ form.guests_count }}) السعر</div>
+        <div class="col-8 title">
+          ({{ bookingPrice }}* {{ form.guests_count }}) السعر
+        </div>
         <div class="col-4 price">ريال {{ price }}</div>
         <div class="col-8 title">ضريبة القيمة المضافة</div>
         <div class="col-4 price">ريال {{ tax }}</div>
@@ -255,6 +257,11 @@
 <script>
 import { required, minLength } from "vuelidate/lib/validators";
 export default {
+  mounted() {
+    axios.get("/price").then((response) => {
+      this.bookingPrice = response.data.price;
+    });
+  },
   components: {},
   data() {
     let currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
@@ -276,6 +283,7 @@ export default {
         terms: false,
       },
       showTermsError: false,
+      bookingPrice: 0,
     };
   },
   validations: {
@@ -316,7 +324,7 @@ export default {
   },
   computed: {
     price() {
-      return this.form.guests_count * 100;
+      return this.form.guests_count * this.bookingPrice;
     },
     tax() {
       return this.price * 0.15;

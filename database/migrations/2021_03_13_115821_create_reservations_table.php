@@ -25,7 +25,6 @@ class CreateReservationsTable extends Migration
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->unsignedInteger("guests_count");
             //0 =>for first one, 1=>for second one
-            $table->tinyInteger("is_accepted")->default(0); //0 =>pending , 1=>accepted ,2=>declined
             $table->timestamps();
         });
     }

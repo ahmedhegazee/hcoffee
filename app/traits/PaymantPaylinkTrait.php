@@ -15,9 +15,9 @@ trait PaymantPaylinkTrait
         $url = $this->url . '/auth';
 
         $apifields = [
-            "apiId" => "APP_ID_1596474965",
+            "apiId" => \config('paylink.appid'),
             "persistToken" => false,
-            "secretKey" => "c33dd197-dfbb-36ab-81ac-265c713e4321",
+            "secretKey" => \config('paylink.secret'),
         ];
         $urldecode = Http::withHeaders([
             "Content-Type" => "application/json"
@@ -31,10 +31,10 @@ trait PaymantPaylinkTrait
         $apifields = [
             "amount" => $reservation->total_amount,
             "callBackUrl" => route('welcome'),
-            "clientEmail" => null,
+            "clientEmail" => 'email@test.com',
             "clientMobile" => $reservation->phone,
             "clientName" => $reservation->name,
-            "note" => $reservation->notes,
+            "note" => $reservation->notes ?? "",
             "orderNumber" => $reservation->id,
             "products" => $products,
         ];
@@ -50,6 +50,7 @@ trait PaymantPaylinkTrait
         // $reservation->update([
         //     'payment_transaction_no' => $urldecode['transactionNo'],
         // ]);
+        // return $urldecode;
         return $urldecode['url'];
     }
     private function GetInvoice($transactionNo)
@@ -59,7 +60,7 @@ trait PaymantPaylinkTrait
             "Content-Type" => "application/json",
             "Authorization" => "Bearer " . $this->GetTokenPayment()
         ])->asJson()->get($url)->json();
-
-        return $urldecode['orderStatus'];
+        return $urldecode;
+        // return $urldecode['orderStatus'];
     }
 }

@@ -12,8 +12,8 @@ class Interval extends Model
     public function getTypeAttribute()
     {
         return [
-            0 => "من ٦ الى ١٠ مساء",
-            1 => "من ١٠ الى ١٢ مساء"
+            1 => "من ٦ الى ١٠ مساء",
+            2 => "من ١٠ الى ١٢ مساء"
         ][$this->attributes['type']];
     }
     public function getIsCompletedAttribute()
@@ -32,9 +32,9 @@ class Interval extends Model
     {
         return $this->hasMany(Reservation::class)->sum("guests_count");
     }
-    public function scopeDateFilter($query, $start, $end)
+    public function scopeDateFilter($query, $date)
     {
-        return $query->when($start, fn ($q, $start, $end) => $q->whereBetween("date", [$start, $end]));
+        return $query->when($date, fn ($q, $date) => $q->where("date", $date));
     }
     public function scopeType($query, $type)
     {

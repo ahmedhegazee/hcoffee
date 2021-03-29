@@ -4,13 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Interval;
 use App\Models\Reservation;
+use App\Models\Setting;
 use App\Traits\PaymantPaylinkTrait as TraitsPaymantPaylinkTrait;
-use App\Traits\TwilioWhatsappTrait;
+use App\Traits\SMSServiceTrait;
 use Illuminate\Http\Request;
 
 class FrontController extends Controller
 {
-    use TraitsPaymantPaylinkTrait, TwilioWhatsappTrait;
+    use TraitsPaymantPaylinkTrait, SMSServiceTrait;
+    public function test()
+    {
+        // dd(asset("images/logo.jpg"));
+        // $result  = $this->GetInvoice(1616559834169);
+        $result = $this->sendMessage('966596610095', 'مرحبا بكم في هولوود كافيه تم الحجز بتاريخ اليوم ٢٥-٣-٢٠٢١');
+        dd($result);
+    }
     public function makeOrder(Request $request)
     {
         $rules = [
@@ -35,7 +43,7 @@ class FrontController extends Controller
             $products = [
                 [
                     "description" => "Making reservation for seats in hollywood cafe",
-                    "imageSrc" => \asset("images/logo.jpg"),
+                    "imageSrc" => \config('app.url') . '/images/logo.jpg',
                     "price" => $reservation->total_amount,
                     "qty" => 1,
                     "title" => "Seats Reservation"
@@ -46,6 +54,7 @@ class FrontController extends Controller
                 $interval->is_completed = 1;
                 $interval->save();
             }
+
             return response()->json(["url" => $url]);
         } else {
             return \response()->json(["message" => "نعتذر لا يمكن الحجز في هذا اليوم العدد مكتمل"]);
@@ -58,5 +67,9 @@ class FrontController extends Controller
         // $result = $this->GetInvoice($reservation->payment_transaction_id);
         // dd($result);
         return view("welcome");
+    }
+    public function getPrice()
+    {
+        return \response()->json(['price' => Setting::first()->value]);
     }
 }

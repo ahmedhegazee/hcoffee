@@ -10,7 +10,7 @@ class IntervalController extends Controller
     public function index(Request $request)
     {
         $title = "فترات الحجز";
-        $intervals = Interval::dateFilter($request->start_date, $request->end_date)
+        $intervals = Interval::dateFilter($request->start_date)
             ->where(function ($queury) use ($request) {
                 $queury->type($request->type)
                     ->status($request->status);

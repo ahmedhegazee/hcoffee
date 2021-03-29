@@ -60,6 +60,15 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.home_page_setting.index') }}"
+                        class="nav-link {{ Request::url()==route('admin.home_page_setting.index')?'active':'' }}">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>
+                            اعدادات الصفحة الرئيسية
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
